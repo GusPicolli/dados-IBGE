@@ -1,0 +1,47 @@
+name: "Terraform Deploy"
+
+on:
+  push:
+    branches:
+      - dev  
+  #pull_request:
+  #  branches:
+  #    - dev  
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Checkout do código
+        uses: actions/checkout@v4
+
+      - name: 🔑 Configurar credenciais AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1 
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 1200
+          role-session-name: MySessionName
+
+      - name: 📦 Instalar Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0  
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: 🏗️ Inicializar Terraform
+        run: terraform init
+        working-directory: terraform  
+
+      - name: 🔍 Validar Terraform
+        run: terraform plan
+        working-directory: terraform
+
+      - name: 🚀 Aplicar Terraform
+        run: terraform apply -auto-approve
+        working-directory: terraform
