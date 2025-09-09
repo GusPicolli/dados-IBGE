@@ -1,8 +1,10 @@
 {
+  "description": "Acesso à internet de pessoas maiores de 10 anos",
   "url": "https://servicodados.ibge.gov.br/api/v3/agregados/6793/periodos/2024/variaveis/140",
   "parameters": {
     "localidades": "N2[all]",
     "classificacao": "1[6795]|2[6794]|422[48578,48579]"
   },
-  "results_field": "resultados"
+  "results_field": "resultados",
+  "bucket_bronze": ""
 }

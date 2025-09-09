@@ -1,7 +1,13 @@
-export RAW_PATH = ../dados-CoinGecko/AWS/S3/RAW
-export WORK_PATH = ../dados-CoinGecko/AWS/S3/WORK
-export RAW_CONFIG = ./assets/config.ingestion.json
-export WORK_CONFIG = ./assets/config.preparation.json
+project = dados-IBGE
+subsource = internet
+
+export BRONZE_PATH = ../$(project)/AWS/S3/01.bronze
+export SILVER_PATH = ../$(project)/AWS/S3/02.silver
+export GOLD_PATH = ../$(project)/AWS/S3/03.gold
+
+export BRONZE_CONFIG = ./assets/bronze.$(subsource).json
+export SILVER_CONFIG = ./assets/silver.$(subsource).json
+export GOLD_CONFIG = ./assets/gold.$(subsource).json
 
 export AWS_ACCESS_KEY_ID = 
 export AWS_SECRET_ACCESS_KEY = 
@@ -23,7 +29,9 @@ venv:
 	python -m venv venv 
 
 venv_requirements:
-	venv\Scripts\activate && pip install -r requirements.txt 
+	venv\Scripts\activate && \
+	python.exe -m pip install --upgrade pip && \
+	pip install -r requirements.txt 
 
 venv_run:
 	venv\Scripts\activate && python src/app.py
@@ -51,13 +59,20 @@ run_tests:
 
 ## DOCKER ##
 
-docker_build_airflow:
+
+docker_run:
+	cd docker && docker run teste
+
+docker_build:
+	cd docker && docker build -f Dockerfile -t teste ..
+
+docker_build_compose:
 	cd docker && docker-compose up --build
 
 docker_down:
 	cd docker && docker-compose down --build
 
-docker_run:
+docker_run_airflow:
 	cd docker && \
     docker-compose run airflow-worker airflow users create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin && \
     docker-compose up

@@ -1,10 +1,33 @@
-# Dockerfile
-FROM apache/airflow:2.10.5-python3.9
+FROM python:3.9-slim
+
+WORKDIR /app
+
+ARG BASE_DIR
+
+ARG BRONZE_PATH 
+ARG SILVER_PATH
+ARG GOLD_PATH 
+
+ARG BRONZE_CONFIG
+ARG SILVER_CONFIG
+ARG GOLD_CONFIG 
+
+ENV  BASE_DIR ${BASE_DIR}
+
+ENV  BRONZE_PATH ${BRONZE_PATH}
+ENV  SILVER_PATH ${SILVER_PATH}
+ENV  GOLD_PATH ${GOLD_PATH}
+
+ENV  BRONZE_CONFIG ${BRONZE_CONFIG}
+ENV  SILVER_CONFIG ${SILVER_CONFIG}
+ENV  GOLD_CONFIG ${GOLD_CONFIG}
 
 ADD requirements.txt .
-RUN pip install apache-airflow==${AIRFLOW_VERSION} -r requirements.txt
 
-ENV RAW_PATH=${RAW_PATH}
-ENV WORK_PATH=${WORK_PATH}
-ENV RAW_CONFIG=${RAW_CONFIG}
-ENV WORK_CONFIG=${WORK_CONFIG}
+COPY docker/. .
+COPY src/.  .
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "app.py" ]

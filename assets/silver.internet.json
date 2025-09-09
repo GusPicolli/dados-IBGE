@@ -1,0 +1,16 @@
+{
+  "metadado": {
+    "id": "string",
+    "nome": "string",
+    "categoria.6795": "string",
+    "categoria.6794": "string",
+    "categoria.48578": "string",
+    "categoria.48579": "string",
+    "localidade.id": "string",
+    "localidade.nivel.id": "string",
+    "localidade.nivel.nome": "string",
+    "localidade.nome": "string",
+    "serie.2024": "int"
+  },
+  "bucket_silver": ""
+}
